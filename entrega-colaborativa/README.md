@@ -2,7 +2,7 @@
 
 ## Participantes
 
-- **Sergio Barragán:** [sergiobarrag-qa](https://github.com/sergiobarrag-qa)
+- **Sergio Andrés Barragán Caro:** [sergiobarrag-qa](https://github.com/sergiobarrag-qa)
 - **Sergio Arturo Marín Contreras:** [sergioarturomc](https://github.com/sergioarturomc)
 
 ## Propósito
@@ -30,4 +30,4 @@ En esta carpeta se encuentran los archivos que conforman la entrega:
 
 ## Colaboración
 
-El trabajo se desarrolló de manera conjunta entre Sergio Barragán y Sergio Arturo Marín Contreras, compartiendo criterios de prueba, revisando resultados y consolidando la documentación de la actividad.
+El trabajo se desarrolló de manera conjunta entre Sergio Andrés Barragán Caro y Sergio Arturo Marín Contreras, compartiendo criterios de prueba, revisando resultados y consolidando la documentación de la actividad.
