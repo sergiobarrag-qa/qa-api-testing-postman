@@ -1,0 +1,2447 @@
+{
+  "info": {
+    "_postman_id": "b0a69362-4d3e-4cd2-9c43-66c5d4eae066",
+    "name": "JSONPlaceholder — Suite colaborativa QA (66 casos)",
+    "description": "Colección final colaborativa: 46 casos principales y 20 casos complementarios exploratorios. Los casos están separados en dos carpetas raíz y organizados por recurso. Los 46 principales se ejecutaron y pasaron las aserciones configuradas; esto no sustituye la validación contra requisitos completos. Los 20 complementarios se ejecutaron y documentaron como exploratorios. Sin criterios de aceptación completos, sus respuestas se registran como observaciones y no se clasifican automáticamente como Pass/Fail ni como bugs confirmados. JSONPlaceholder es una API de demostración y simula las operaciones de escritura; no se garantiza la persistencia de POST/PUT/PATCH/DELETE. Variable incluida: baseUrl = https://jsonplaceholder.typicode.com.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Casos principales — 46",
+      "description": "Casos centrales de la suite ejecutada. Los PASS corresponden a las aserciones automatizadas actualmente configuradas.",
+      "item": [
+        {
+          "name": "Publicaciones",
+          "item": [
+            {
+              "name": "GET-PST-001 - Listar publicaciones",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/posts"
+              },
+              "description": "Caso incorporado para cubrir GET del recurso posts.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - listar publicaciones\", function () { pm.response.to.have.status(200); });",
+                      "pm.test(\"La respuesta es una lista JSON\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+                      "pm.test(\"Hay 100 publicaciones de referencia\", function () { pm.expect(pm.response.json().length).to.eql(100); });"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "GET-PST-002 - Consultar publicación por ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/posts/1"
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - publicación existente\", function () { pm.response.to.have.status(200); });",
+                      "pm.test(\"La respuesta contiene id=1\", function () { pm.expect(pm.response.json().id).to.eql(1); });"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "GET-PST-003 - Consultar último ID de referencia",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/posts/100"
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - último ID de referencia\", function () { pm.response.to.have.status(200); });",
+                      "pm.test(\"La respuesta contiene id=100\", function () { pm.expect(pm.response.json().id).to.eql(100); });"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "POST-001 - Crear publicación con datos válidos",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json; charset=UTF-8",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/posts",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"userId\":1,\"title\":\"QA Test\",\"body\":\"Contenido de prueba\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "description": "Origen: matriz colaborativa, caso POST-001. JSONPlaceholder simula la creación; no comprobar persistencia.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 201 - creación simulada\", function () { pm.response.to.have.status(201); });",
+                      "pm.test(\"La respuesta JSON contiene los campos enviados y un id\", function () {",
+                      "  const data = pm.response.json();",
+                      "  pm.expect(data).to.have.property(\"id\");",
+                      "  pm.expect(data.userId).to.eql(1);",
+                      "  pm.expect(data.title).to.eql(\"QA Test\");",
+                      "  pm.expect(data.body).to.eql(\"Contenido de prueba\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "PATCH-001 - Actualizar únicamente el título",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json; charset=UTF-8",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/posts/1",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"title\":\"Título actualizado\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "description": "Origen: matriz colaborativa, caso PATCH-001. Los cambios de JSONPlaceholder no persisten.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - actualización parcial simulada\", function () { pm.response.to.have.status(200); });",
+                      "pm.test(\"La respuesta refleja el nuevo título\", function () { pm.expect(pm.response.json().title).to.eql(\"Título actualizado\"); });"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "DELETE-001 - Eliminar una publicación existente",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/posts/1"
+              },
+              "description": "Origen: matriz colaborativa, caso DELETE-001. JSONPlaceholder simula la eliminación; no se verifica persistencia.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - eliminación simulada\", function () { pm.response.to.have.status(200); });",
+                      "pm.test(\"La respuesta de eliminación se puede interpretar como JSON\", function () {",
+                      "  if (pm.response.text().trim().length > 0) { pm.expect(pm.response.json()).to.be.an(\"object\"); }",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Comentarios",
+          "description": "9 casos de Word. Los casos exploratorios reutilizan una solicitud para probar una variante por ejecución.",
+          "item": [
+            {
+              "name": "COM-GET-01 - Listar comentarios",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/comments",
+                "description": "Caso de Word: COM-GET-01. Listar comentarios.\nDatos de prueba: Sin cuerpo.\nResultado/validaciones: 200 y lista JSON; confirmar cantidad. Código, lista, campos y cantidad.\nPrioridad: Alta."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - lista de comentarios\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"La respuesta es una lista JSON - comentarios\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"array\");",
+                      "});",
+                      "pm.test(\"Cantidad documentada - comentarios\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.length).to.eql(500);",
+                      "});",
+                      "pm.test(\"Campos principales y tipos - comentarios\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  const r = datos[0];",
+                      "  pm.expect(r).to.have.property(\"postId\");",
+                      "  pm.expect(r.postId).to.be.a(\"number\");",
+                      "  pm.expect(r).to.have.property(\"id\");",
+                      "  pm.expect(r.id).to.be.a(\"number\");",
+                      "  pm.expect(r).to.have.property(\"name\");",
+                      "  pm.expect(r.name).to.be.a(\"string\");",
+                      "  pm.expect(r).to.have.property(\"email\");",
+                      "  pm.expect(r.email).to.be.a(\"string\");",
+                      "  pm.expect(r).to.have.property(\"body\");",
+                      "  pm.expect(r.body).to.be.a(\"string\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "COM-GET-02 - Consultar comentario por ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/comments/1",
+                "description": "Caso de Word: COM-GET-02. Consultar comentario por ID.\nDatos de prueba: ID=1.\nResultado/validaciones: 200 y objeto con id=1. Código, id y campos clave.\nPrioridad: Alta."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - comentario por ID\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta de un solo objeto - comentario\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"object\").and.not.to.be.an(\"array\");",
+                      "  pm.expect(datos.id).to.eql(1);",
+                      "  pm.expect(datos).to.have.property(\"postId\");",
+                      "  pm.expect(datos.postId).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"id\");",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"name\");",
+                      "  pm.expect(datos.name).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"email\");",
+                      "  pm.expect(datos.email).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"body\");",
+                      "  pm.expect(datos.body).to.be.a(\"string\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "COM-GET-03 - Consultar último ID documentado",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/comments/500",
+                "description": "Caso de Word: COM-GET-03. Consultar último ID documentado.\nDatos de prueba: ID=500.\nResultado/validaciones: Confirmar respuesta para ID 500. Código, id y estructura.\nPrioridad: Media."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - comentario límite superior por ID\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta de un solo objeto - comentario límite superior\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"object\").and.not.to.be.an(\"array\");",
+                      "  pm.expect(datos.id).to.eql(500);",
+                      "  pm.expect(datos).to.have.property(\"postId\");",
+                      "  pm.expect(datos.postId).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"id\");",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"name\");",
+                      "  pm.expect(datos.name).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"email\");",
+                      "  pm.expect(datos.email).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"body\");",
+                      "  pm.expect(datos.body).to.be.a(\"string\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "COM-GET-05 - Filtrar y consultar comentarios relacionados",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/comments?postId=1",
+                "description": "Caso de Word: COM-GET-05. Filtrar y consultar comentarios relacionados.\nDatos de prueba: postId=1; ruta relacionada.\nResultado/validaciones: Resultados asociados a la publicación 1. Comprobar postId=1 y comparar rutas.\nPrioridad: Media.\nNota: Este único caso comprueba la ruta filtrada y consulta también la ruta anidada desde el script."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - comentarios de la publicación 1\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Filtro correcto - comentarios de la publicación 1\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"array\");",
+                      "  datos.forEach(r => pm.expect(r.postId).to.eql(1));",
+                      "});",
+                      "const base = pm.variables.replaceIn(\"{{baseUrl}}\");",
+                      "pm.sendRequest({ url: base + \"/posts/1/comments\", method: \"GET\" }, function (err1, res1) {",
+                      "  pm.test(\"Ruta relacionada: comentarios por ruta anidada\", function () {",
+                      "    pm.expect(err1).to.equal(null);",
+                      "    pm.expect(res1.code).to.eql(200);",
+                      "    const relacionados = res1.json();",
+                      "    pm.expect(relacionados).to.be.an(\"array\");",
+                      "    relacionados.forEach(r => pm.expect(r.postId).to.eql(1));",
+                      "  });",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "COM-POST-01 - Crear comentario válido",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/comments",
+                "description": "Caso de Word: COM-POST-01. Crear comentario válido.\nDatos de prueba: postId=1; name, email y body válidos.\nResultado/validaciones: 201 esperado; confirmar respuesta real. Código, campos enviados e id.\nPrioridad: Alta.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"postId\": 1,\n  \"name\": \"Comentario de prueba\",\n  \"email\": \"qa.prueba@example.com\",\n  \"body\": \"Comentario enviado desde Postman para el proyecto QA.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 201 - crear comentario\", function () {",
+                      "  pm.response.to.have.status(201);",
+                      "});",
+                      "pm.test(\"Respuesta contiene un ID - crear comentario\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "});",
+                      "pm.test(\"Respuesta refleja los datos enviados - crear comentario\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.postId).to.eql(1);",
+                      "  pm.expect(datos.name).to.eql(\"Comentario de prueba\");",
+                      "  pm.expect(datos.email).to.eql(\"qa.prueba@example.com\");",
+                      "  pm.expect(datos.body).to.eql(\"Comentario enviado desde Postman para el proyecto QA.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "COM-PUT-01 - Actualizar comentario completo",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/comments/1",
+                "description": "Caso de Word: COM-PUT-01. Actualizar comentario completo.\nDatos de prueba: id=1; postId=1; textos válidos.\nResultado/validaciones: 200 esperado; revisar campos devueltos. Código, id y campos.\nPrioridad: Alta.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": 1,\n  \"postId\": 1,\n  \"name\": \"Comentario actualizado mediante PUT\",\n  \"email\": \"qa.put@example.com\",\n  \"body\": \"Cuerpo actualizado para la prueba PUT.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - actualizar comentario\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta refleja los datos de actualización - comentario\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.id).to.eql(1);",
+                      "  pm.expect(datos.postId).to.eql(1);",
+                      "  pm.expect(datos.name).to.eql(\"Comentario actualizado mediante PUT\");",
+                      "  pm.expect(datos.email).to.eql(\"qa.put@example.com\");",
+                      "  pm.expect(datos.body).to.eql(\"Cuerpo actualizado para la prueba PUT.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "PATCH-007 - Actualizar el nombre del comentario",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json; charset=UTF-8",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/comments/1",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Nombre actualizado\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "description": "Origen: matriz colaborativa, caso PATCH-007.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - actualización parcial simulada\", function () { pm.response.to.have.status(200); });",
+                      "pm.test(\"La respuesta refleja el nombre actualizado\", function () { pm.expect(pm.response.json().name).to.eql(\"Nombre actualizado\"); });"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "DELETE-007 - Eliminar un comentario existente",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/comments/1"
+              },
+              "description": "Origen: matriz colaborativa, caso DELETE-007.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - eliminación simulada\", function () { pm.response.to.have.status(200); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Álbumes",
+          "description": "9 casos de Word.",
+          "item": [
+            {
+              "name": "ALB-GET-01 - Listar álbumes",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/albums",
+                "description": "Caso de Word: ALB-GET-01. Listar álbumes.\nDatos de prueba: Sin cuerpo.\nResultado/validaciones: 200 y lista JSON; confirmar cantidad. Código, lista, campos y cantidad.\nPrioridad: Alta."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - lista de álbumes\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"La respuesta es una lista JSON - álbumes\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"array\");",
+                      "});",
+                      "pm.test(\"Cantidad documentada - álbumes\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.length).to.eql(100);",
+                      "});",
+                      "pm.test(\"Campos principales y tipos - álbumes\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  const r = datos[0];",
+                      "  pm.expect(r).to.have.property(\"userId\");",
+                      "  pm.expect(r.userId).to.be.a(\"number\");",
+                      "  pm.expect(r).to.have.property(\"id\");",
+                      "  pm.expect(r.id).to.be.a(\"number\");",
+                      "  pm.expect(r).to.have.property(\"title\");",
+                      "  pm.expect(r.title).to.be.a(\"string\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "ALB-GET-02 - Consultar álbum por ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/albums/1",
+                "description": "Caso de Word: ALB-GET-02. Consultar álbum por ID.\nDatos de prueba: ID=1.\nResultado/validaciones: 200 y objeto con id=1. Código, id y título.\nPrioridad: Alta."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - álbum por ID\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta de un solo objeto - álbum\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"object\").and.not.to.be.an(\"array\");",
+                      "  pm.expect(datos.id).to.eql(1);",
+                      "  pm.expect(datos).to.have.property(\"userId\");",
+                      "  pm.expect(datos.userId).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"id\");",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"title\");",
+                      "  pm.expect(datos.title).to.be.a(\"string\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "ALB-GET-03 - Consultar último ID documentado",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/albums/100",
+                "description": "Caso de Word: ALB-GET-03. Consultar último ID documentado.\nDatos de prueba: ID=100.\nResultado/validaciones: Confirmar respuesta para ID 100. Código, id y estructura.\nPrioridad: Media."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - álbum límite superior por ID\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta de un solo objeto - álbum límite superior\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"object\").and.not.to.be.an(\"array\");",
+                      "  pm.expect(datos.id).to.eql(100);",
+                      "  pm.expect(datos).to.have.property(\"userId\");",
+                      "  pm.expect(datos.userId).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"id\");",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"title\");",
+                      "  pm.expect(datos.title).to.be.a(\"string\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "ALB-GET-05 - Filtrar álbumes por usuario",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/albums?userId=1",
+                "description": "Caso de Word: ALB-GET-05. Filtrar álbumes por usuario.\nDatos de prueba: userId=1; ruta relacionada.\nResultado/validaciones: Álbumes del usuario 1. Comprobar userId=1 y comparar rutas.\nPrioridad: Media.\nNota: Este único caso valida el filtro e invoca la ruta anidada para comprobar la relación."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - álbumes del usuario 1\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Filtro correcto - álbumes del usuario 1\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"array\");",
+                      "  datos.forEach(r => pm.expect(r.userId).to.eql(1));",
+                      "});",
+                      "const base = pm.variables.replaceIn(\"{{baseUrl}}\");",
+                      "pm.sendRequest({ url: base + \"/users/1/albums\", method: \"GET\" }, function (err1, res1) {",
+                      "  pm.test(\"Ruta relacionada: álbumes por ruta anidada\", function () {",
+                      "    pm.expect(err1).to.equal(null);",
+                      "    pm.expect(res1.code).to.eql(200);",
+                      "    const relacionados = res1.json();",
+                      "    pm.expect(relacionados).to.be.an(\"array\");",
+                      "    relacionados.forEach(r => pm.expect(r.userId).to.eql(1));",
+                      "  });",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "ALB-POST-01 - Crear álbum válido",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/albums",
+                "description": "Caso de Word: ALB-POST-01. Crear álbum válido.\nDatos de prueba: userId=1; title válido.\nResultado/validaciones: 201 esperado; confirmar respuesta real. Código y campos enviados.\nPrioridad: Alta.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": 1,\n  \"title\": \"Álbum de prueba de QA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 201 - crear álbum\", function () {",
+                      "  pm.response.to.have.status(201);",
+                      "});",
+                      "pm.test(\"Respuesta contiene un ID - crear álbum\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "});",
+                      "pm.test(\"Respuesta refleja los datos enviados - crear álbum\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.userId).to.eql(1);",
+                      "  pm.expect(datos.title).to.eql(\"Álbum de prueba de QA\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "ALB-PUT-01 - Actualizar álbum completo",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/albums/1",
+                "description": "Caso de Word: ALB-PUT-01. Actualizar álbum completo.\nDatos de prueba: id=1; userId=1; title válido.\nResultado/validaciones: 200 esperado; revisar campos devueltos. Código, id y title.\nPrioridad: Alta.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": 1,\n  \"userId\": 1,\n  \"title\": \"Álbum actualizado mediante PUT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - actualizar álbum\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta refleja los datos de actualización - álbum\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.id).to.eql(1);",
+                      "  pm.expect(datos.userId).to.eql(1);",
+                      "  pm.expect(datos.title).to.eql(\"Álbum actualizado mediante PUT\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "PATCH-012 - Actualizar el título del álbum",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json; charset=UTF-8",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/albums/1",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"title\":\"Álbum actualizado\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "description": "Origen: matriz colaborativa, caso PATCH-012.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - actualización parcial simulada\", function () { pm.response.to.have.status(200); });",
+                      "pm.test(\"La respuesta refleja el nuevo título\", function () { pm.expect(pm.response.json().title).to.eql(\"Álbum actualizado\"); });"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "DELETE-011 - Eliminar un álbum existente",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/albums/1"
+              },
+              "description": "Origen: matriz colaborativa, caso DELETE-011.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - eliminación simulada\", function () { pm.response.to.have.status(200); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Fotos",
+          "description": "9 casos de Word.",
+          "item": [
+            {
+              "name": "FOT-GET-01 - Listar fotos",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/photos",
+                "description": "Caso de Word: FOT-GET-01. Listar fotos.\nDatos de prueba: Sin cuerpo.\nResultado/validaciones: 200 y lista JSON; revisar URLs. Código, lista, campos y formato de URL.\nPrioridad: Alta."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - lista de fotos\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"La respuesta es una lista JSON - fotos\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"array\");",
+                      "});",
+                      "pm.test(\"Cantidad documentada - fotos\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.length).to.eql(5000);",
+                      "});",
+                      "pm.test(\"Campos principales y tipos - fotos\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  const r = datos[0];",
+                      "  pm.expect(r).to.have.property(\"albumId\");",
+                      "  pm.expect(r.albumId).to.be.a(\"number\");",
+                      "  pm.expect(r).to.have.property(\"id\");",
+                      "  pm.expect(r.id).to.be.a(\"number\");",
+                      "  pm.expect(r).to.have.property(\"title\");",
+                      "  pm.expect(r.title).to.be.a(\"string\");",
+                      "  pm.expect(r).to.have.property(\"url\");",
+                      "  pm.expect(r.url).to.be.a(\"string\");",
+                      "  pm.expect(r).to.have.property(\"thumbnailUrl\");",
+                      "  pm.expect(r.thumbnailUrl).to.be.a(\"string\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "FOT-GET-02 - Consultar foto por ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/photos/1",
+                "description": "Caso de Word: FOT-GET-02. Consultar foto por ID.\nDatos de prueba: ID=1.\nResultado/validaciones: 200 y objeto con id=1. Código, id, título y URLs.\nPrioridad: Alta."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - foto por ID\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta de un solo objeto - foto\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"object\").and.not.to.be.an(\"array\");",
+                      "  pm.expect(datos.id).to.eql(1);",
+                      "  pm.expect(datos).to.have.property(\"albumId\");",
+                      "  pm.expect(datos.albumId).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"id\");",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"title\");",
+                      "  pm.expect(datos.title).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"url\");",
+                      "  pm.expect(datos.url).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"thumbnailUrl\");",
+                      "  pm.expect(datos.thumbnailUrl).to.be.a(\"string\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "FOT-GET-03 - Consultar último ID documentado",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/photos/5000",
+                "description": "Caso de Word: FOT-GET-03. Consultar último ID documentado.\nDatos de prueba: ID=5000.\nResultado/validaciones: Confirmar respuesta para ID 5000. Código, id y estructura.\nPrioridad: Media."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - foto límite superior por ID\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta de un solo objeto - foto límite superior\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"object\").and.not.to.be.an(\"array\");",
+                      "  pm.expect(datos.id).to.eql(5000);",
+                      "  pm.expect(datos).to.have.property(\"albumId\");",
+                      "  pm.expect(datos.albumId).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"id\");",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"title\");",
+                      "  pm.expect(datos.title).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"url\");",
+                      "  pm.expect(datos.url).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"thumbnailUrl\");",
+                      "  pm.expect(datos.thumbnailUrl).to.be.a(\"string\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "FOT-GET-05 - Filtrar fotos por álbum",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/photos?albumId=1",
+                "description": "Caso de Word: FOT-GET-05. Filtrar fotos por álbum.\nDatos de prueba: albumId=1; ruta relacionada.\nResultado/validaciones: Fotos del álbum 1. Comprobar albumId=1 y comparar rutas.\nPrioridad: Media.\nNota: Este único caso valida el filtro e invoca la ruta anidada para comprobar la relación."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - fotos del álbum 1\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Filtro correcto - fotos del álbum 1\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"array\");",
+                      "  datos.forEach(r => pm.expect(r.albumId).to.eql(1));",
+                      "});",
+                      "const base = pm.variables.replaceIn(\"{{baseUrl}}\");",
+                      "pm.sendRequest({ url: base + \"/albums/1/photos\", method: \"GET\" }, function (err1, res1) {",
+                      "  pm.test(\"Ruta relacionada: fotos por ruta anidada\", function () {",
+                      "    pm.expect(err1).to.equal(null);",
+                      "    pm.expect(res1.code).to.eql(200);",
+                      "    const relacionados = res1.json();",
+                      "    pm.expect(relacionados).to.be.an(\"array\");",
+                      "    relacionados.forEach(r => pm.expect(r.albumId).to.eql(1));",
+                      "  });",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "FOT-POST-01 - Crear foto válida",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/photos",
+                "description": "Caso de Word: FOT-POST-01. Crear foto válida.\nDatos de prueba: albumId=1; title y URLs válidas.\nResultado/validaciones: 201 esperado; confirmar respuesta real. Código, campos y URLs devueltos.\nPrioridad: Alta.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"albumId\": 1,\n  \"title\": \"Foto de prueba de QA\",\n  \"url\": \"https://example.com/foto-prueba.jpg\",\n  \"thumbnailUrl\": \"https://example.com/miniatura-prueba.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 201 - crear foto\", function () {",
+                      "  pm.response.to.have.status(201);",
+                      "});",
+                      "pm.test(\"Respuesta contiene un ID - crear foto\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "});",
+                      "pm.test(\"Respuesta refleja los datos enviados - crear foto\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.albumId).to.eql(1);",
+                      "  pm.expect(datos.title).to.eql(\"Foto de prueba de QA\");",
+                      "  pm.expect(datos.url).to.eql(\"https://example.com/foto-prueba.jpg\");",
+                      "  pm.expect(datos.thumbnailUrl).to.eql(\"https://example.com/miniatura-prueba.jpg\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "FOT-PUT-01 - Actualizar foto completa",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/photos/1",
+                "description": "Caso de Word: FOT-PUT-01. Actualizar foto completa.\nDatos de prueba: id=1; albumId=1; campos válidos.\nResultado/validaciones: 200 esperado; revisar campos devueltos. Código, id, título y URLs.\nPrioridad: Alta.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": 1,\n  \"albumId\": 1,\n  \"title\": \"Foto actualizada mediante PUT\",\n  \"url\": \"https://example.com/foto-actualizada.jpg\",\n  \"thumbnailUrl\": \"https://example.com/miniatura-actualizada.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - actualizar foto\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta refleja los datos de actualización - foto\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.id).to.eql(1);",
+                      "  pm.expect(datos.albumId).to.eql(1);",
+                      "  pm.expect(datos.title).to.eql(\"Foto actualizada mediante PUT\");",
+                      "  pm.expect(datos.url).to.eql(\"https://example.com/foto-actualizada.jpg\");",
+                      "  pm.expect(datos.thumbnailUrl).to.eql(\"https://example.com/miniatura-actualizada.jpg\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "PATCH-016 - Actualizar el título de la foto",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json; charset=UTF-8",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/photos/1",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"title\":\"Foto actualizada\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "description": "Origen: matriz colaborativa, caso PATCH-016.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - actualización parcial simulada\", function () { pm.response.to.have.status(200); });",
+                      "pm.test(\"La respuesta refleja el título actualizado\", function () { pm.expect(pm.response.json().title).to.eql(\"Foto actualizada\"); });"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "DELETE-015 - Eliminar una foto existente",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/photos/1"
+              },
+              "description": "Origen: matriz colaborativa, caso DELETE-015.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - eliminación simulada\", function () { pm.response.to.have.status(200); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Tareas",
+          "description": "9 casos de Word.",
+          "item": [
+            {
+              "name": "TAR-GET-01 - Listar tareas",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/todos",
+                "description": "Caso de Word: TAR-GET-01. Listar tareas.\nDatos de prueba: Sin cuerpo.\nResultado/validaciones: 200 y lista JSON. Código, lista y tipos de campos.\nPrioridad: Alta."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - lista de tareas\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"La respuesta es una lista JSON - tareas\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"array\");",
+                      "});",
+                      "pm.test(\"Cantidad documentada - tareas\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.length).to.eql(200);",
+                      "});",
+                      "pm.test(\"Campos principales y tipos - tareas\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  const r = datos[0];",
+                      "  pm.expect(r).to.have.property(\"userId\");",
+                      "  pm.expect(r.userId).to.be.a(\"number\");",
+                      "  pm.expect(r).to.have.property(\"id\");",
+                      "  pm.expect(r.id).to.be.a(\"number\");",
+                      "  pm.expect(r).to.have.property(\"title\");",
+                      "  pm.expect(r.title).to.be.a(\"string\");",
+                      "  pm.expect(r).to.have.property(\"completed\");",
+                      "  pm.expect(r.completed).to.be.a(\"boolean\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "TAR-GET-02 - Consultar tarea por ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/todos/1",
+                "description": "Caso de Word: TAR-GET-02. Consultar tarea por ID.\nDatos de prueba: ID=1.\nResultado/validaciones: 200 y objeto con id=1. Código, id y campos clave.\nPrioridad: Alta."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - tarea por ID\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta de un solo objeto - tarea\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"object\").and.not.to.be.an(\"array\");",
+                      "  pm.expect(datos.id).to.eql(1);",
+                      "  pm.expect(datos).to.have.property(\"userId\");",
+                      "  pm.expect(datos.userId).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"id\");",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"title\");",
+                      "  pm.expect(datos.title).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"completed\");",
+                      "  pm.expect(datos.completed).to.be.a(\"boolean\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "TAR-GET-03 - Consultar último ID documentado",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/todos/200",
+                "description": "Caso de Word: TAR-GET-03. Consultar último ID documentado.\nDatos de prueba: ID=200.\nResultado/validaciones: Confirmar respuesta para ID 200. Código, id y estructura.\nPrioridad: Media."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - tarea límite superior por ID\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta de un solo objeto - tarea límite superior\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"object\").and.not.to.be.an(\"array\");",
+                      "  pm.expect(datos.id).to.eql(200);",
+                      "  pm.expect(datos).to.have.property(\"userId\");",
+                      "  pm.expect(datos.userId).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"id\");",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"title\");",
+                      "  pm.expect(datos.title).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"completed\");",
+                      "  pm.expect(datos.completed).to.be.a(\"boolean\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "TAR-GET-05 - Filtrar tareas por usuario/estado",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/todos?userId=1",
+                "description": "Caso de Word: TAR-GET-05. Filtrar tareas por usuario/estado.\nDatos de prueba: userId=1; completed=true; ruta relacionada.\nResultado/validaciones: Resultados que cumplan cada filtro. Comprobar userId y completed.\nPrioridad: Media.\nNota: Este caso conserva una sola solicitud en la colección y valida el filtro por usuario y los dos escenarios relacionados mediante el script."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - tareas del usuario 1\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Filtro correcto - tareas del usuario 1\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"array\");",
+                      "  datos.forEach(r => pm.expect(r.userId).to.eql(1));",
+                      "});",
+                      "const base = pm.variables.replaceIn(\"{{baseUrl}}\");",
+                      "pm.sendRequest({ url: base + \"/todos?completed=true\", method: \"GET\" }, function (err1, res1) {",
+                      "  pm.test(\"Ruta relacionada: tareas completadas\", function () {",
+                      "    pm.expect(err1).to.equal(null);",
+                      "    pm.expect(res1.code).to.eql(200);",
+                      "    const relacionados = res1.json();",
+                      "    pm.expect(relacionados).to.be.an(\"array\");",
+                      "    relacionados.forEach(r => pm.expect(r.completed).to.eql(true));",
+                      "  });",
+                      "});",
+                      "pm.sendRequest({ url: base + \"/users/1/todos\", method: \"GET\" }, function (err2, res2) {",
+                      "  pm.test(\"Ruta relacionada: tareas por ruta anidada\", function () {",
+                      "    pm.expect(err2).to.equal(null);",
+                      "    pm.expect(res2.code).to.eql(200);",
+                      "    const relacionados = res2.json();",
+                      "    pm.expect(relacionados).to.be.an(\"array\");",
+                      "    relacionados.forEach(r => pm.expect(r.userId).to.eql(1));",
+                      "  });",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "TAR-POST-01 - Crear tarea válida",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/todos",
+                "description": "Caso de Word: TAR-POST-01. Crear tarea válida.\nDatos de prueba: userId=1; title válido; completed=false.\nResultado/validaciones: 201 esperado; confirmar respuesta real. Código y campos enviados.\nPrioridad: Alta.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": 1,\n  \"title\": \"Tarea de prueba de QA\",\n  \"completed\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 201 - crear tarea\", function () {",
+                      "  pm.response.to.have.status(201);",
+                      "});",
+                      "pm.test(\"Respuesta contiene un ID - crear tarea\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "});",
+                      "pm.test(\"Respuesta refleja los datos enviados - crear tarea\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.userId).to.eql(1);",
+                      "  pm.expect(datos.title).to.eql(\"Tarea de prueba de QA\");",
+                      "  pm.expect(datos.completed).to.eql(false);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "TAR-PUT-01 - Actualizar tarea completa",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/todos/1",
+                "description": "Caso de Word: TAR-PUT-01. Actualizar tarea completa.\nDatos de prueba: id=1; userId=1; title; completed booleano.\nResultado/validaciones: 200 esperado; revisar campos devueltos. Código, id y tipos de campo.\nPrioridad: Alta.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": 1,\n  \"userId\": 1,\n  \"title\": \"Tarea actualizada mediante PUT\",\n  \"completed\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - actualizar tarea\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta refleja los datos de actualización - tarea\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.id).to.eql(1);",
+                      "  pm.expect(datos.userId).to.eql(1);",
+                      "  pm.expect(datos.title).to.eql(\"Tarea actualizada mediante PUT\");",
+                      "  pm.expect(datos.completed).to.eql(true);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "PATCH-021 - Marcar tarea como completada",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json; charset=UTF-8",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/todos/1",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"completed\":true}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "description": "Origen: matriz colaborativa, caso PATCH-021.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - actualización parcial simulada\", function () { pm.response.to.have.status(200); });",
+                      "pm.test(\"La respuesta refleja completed=true\", function () { pm.expect(pm.response.json().completed).to.eql(true); });"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "DELETE-019 - Eliminar una tarea existente",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/todos/1"
+              },
+              "description": "Origen: matriz colaborativa, caso DELETE-019.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - eliminación simulada\", function () { pm.response.to.have.status(200); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Usuarios",
+          "description": "9 casos de Word.",
+          "item": [
+            {
+              "name": "USU-GET-01 - Listar usuarios",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/users",
+                "description": "Caso de Word: USU-GET-01. Listar usuarios.\nDatos de prueba: Sin cuerpo.\nResultado/validaciones: 200 y lista JSON. Código, lista y estructura address/company.\nPrioridad: Alta."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - lista de usuarios\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"La respuesta es una lista JSON - usuarios\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"array\");",
+                      "});",
+                      "pm.test(\"Cantidad documentada - usuarios\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.length).to.eql(10);",
+                      "});",
+                      "pm.test(\"Campos principales y tipos - usuarios\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  const r = datos[0];",
+                      "  pm.expect(r).to.have.property(\"id\");",
+                      "  pm.expect(r.id).to.be.a(\"number\");",
+                      "  pm.expect(r).to.have.property(\"name\");",
+                      "  pm.expect(r.name).to.be.a(\"string\");",
+                      "  pm.expect(r).to.have.property(\"username\");",
+                      "  pm.expect(r.username).to.be.a(\"string\");",
+                      "  pm.expect(r).to.have.property(\"email\");",
+                      "  pm.expect(r.email).to.be.a(\"string\");",
+                      "  pm.expect(r).to.have.property(\"address\");",
+                      "  pm.expect(r.address).to.be.a(\"object\");",
+                      "  pm.expect(r).to.have.property(\"phone\");",
+                      "  pm.expect(r.phone).to.be.a(\"string\");",
+                      "  pm.expect(r).to.have.property(\"website\");",
+                      "  pm.expect(r.website).to.be.a(\"string\");",
+                      "  pm.expect(r).to.have.property(\"company\");",
+                      "  pm.expect(r.company).to.be.a(\"object\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "USU-GET-02 - Consultar usuario por ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/users/1",
+                "description": "Caso de Word: USU-GET-02. Consultar usuario por ID.\nDatos de prueba: ID=1.\nResultado/validaciones: 200 y objeto con id=1. Código, id y campos de perfil.\nPrioridad: Alta."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - usuario por ID\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta de un solo objeto - usuario\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"object\").and.not.to.be.an(\"array\");",
+                      "  pm.expect(datos.id).to.eql(1);",
+                      "  pm.expect(datos).to.have.property(\"id\");",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"name\");",
+                      "  pm.expect(datos.name).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"username\");",
+                      "  pm.expect(datos.username).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"email\");",
+                      "  pm.expect(datos.email).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"address\");",
+                      "  pm.expect(datos.address).to.be.a(\"object\");",
+                      "  pm.expect(datos).to.have.property(\"phone\");",
+                      "  pm.expect(datos.phone).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"website\");",
+                      "  pm.expect(datos.website).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"company\");",
+                      "  pm.expect(datos.company).to.be.a(\"object\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "USU-GET-03 - Consultar último ID documentado",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/users/10",
+                "description": "Caso de Word: USU-GET-03. Consultar último ID documentado.\nDatos de prueba: ID=10.\nResultado/validaciones: Confirmar respuesta para ID 10. Código, id y estructura.\nPrioridad: Media."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - usuario límite superior por ID\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta de un solo objeto - usuario límite superior\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"object\").and.not.to.be.an(\"array\");",
+                      "  pm.expect(datos.id).to.eql(10);",
+                      "  pm.expect(datos).to.have.property(\"id\");",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "  pm.expect(datos).to.have.property(\"name\");",
+                      "  pm.expect(datos.name).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"username\");",
+                      "  pm.expect(datos.username).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"email\");",
+                      "  pm.expect(datos.email).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"address\");",
+                      "  pm.expect(datos.address).to.be.a(\"object\");",
+                      "  pm.expect(datos).to.have.property(\"phone\");",
+                      "  pm.expect(datos.phone).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"website\");",
+                      "  pm.expect(datos.website).to.be.a(\"string\");",
+                      "  pm.expect(datos).to.have.property(\"company\");",
+                      "  pm.expect(datos.company).to.be.a(\"object\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "USU-GET-05 - Consultar recursos del usuario",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/users/1/posts",
+                "description": "Caso de Word: USU-GET-05. Consultar recursos del usuario.\nDatos de prueba: ID=1; posts, albums y todos relacionados.\nResultado/validaciones: Listas relacionadas con el usuario 1. Verificar relación con userId=1.\nPrioridad: Media.\nNota: Este caso valida publicaciones y ejecuta también las rutas de álbumes y tareas para el mismo usuario."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - publicaciones del usuario 1\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Filtro correcto - publicaciones del usuario 1\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos).to.be.an(\"array\");",
+                      "  datos.forEach(r => pm.expect(r.userId).to.eql(1));",
+                      "});",
+                      "const base = pm.variables.replaceIn(\"{{baseUrl}}\");",
+                      "pm.sendRequest({ url: base + \"/users/1/albums\", method: \"GET\" }, function (err1, res1) {",
+                      "  pm.test(\"Ruta relacionada: álbumes del usuario 1\", function () {",
+                      "    pm.expect(err1).to.equal(null);",
+                      "    pm.expect(res1.code).to.eql(200);",
+                      "    const relacionados = res1.json();",
+                      "    pm.expect(relacionados).to.be.an(\"array\");",
+                      "    relacionados.forEach(r => pm.expect(r.userId).to.eql(1));",
+                      "  });",
+                      "});",
+                      "pm.sendRequest({ url: base + \"/users/1/todos\", method: \"GET\" }, function (err2, res2) {",
+                      "  pm.test(\"Ruta relacionada: tareas del usuario 1\", function () {",
+                      "    pm.expect(err2).to.equal(null);",
+                      "    pm.expect(res2.code).to.eql(200);",
+                      "    const relacionados = res2.json();",
+                      "    pm.expect(relacionados).to.be.an(\"array\");",
+                      "    relacionados.forEach(r => pm.expect(r.userId).to.eql(1));",
+                      "  });",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "USU-POST-01 - Crear usuario válido",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/users",
+                "description": "Caso de Word: USU-POST-01. Crear usuario válido.\nDatos de prueba: name, username y email válidos.\nResultado/validaciones: 201 esperado; confirmar respuesta real. Código y campos enviados.\nPrioridad: Alta.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Usuario de prueba\",\n  \"username\": \"usuario_qa\",\n  \"email\": \"usuario.qa@example.com\",\n  \"address\": {\n    \"street\": \"Calle de prueba\",\n    \"suite\": \"Apto. 1\",\n    \"city\": \"Ciudad de prueba\",\n    \"zipcode\": \"00000-0000\",\n    \"geo\": {\n      \"lat\": \"0.0000\",\n      \"lng\": \"0.0000\"\n    }\n  },\n  \"phone\": \"555-0100\",\n  \"website\": \"ejemplo.test\",\n  \"company\": {\n    \"name\": \"Empresa de prueba\",\n    \"catchPhrase\": \"Soluciones de calidad\",\n    \"bs\": \"pruebas de software\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 201 - crear usuario\", function () {",
+                      "  pm.response.to.have.status(201);",
+                      "});",
+                      "pm.test(\"Respuesta contiene un ID - crear usuario\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.id).to.be.a(\"number\");",
+                      "});",
+                      "pm.test(\"Respuesta refleja los datos enviados - crear usuario\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.name).to.eql(\"Usuario de prueba\");",
+                      "  pm.expect(datos.username).to.eql(\"usuario_qa\");",
+                      "  pm.expect(datos.email).to.eql(\"usuario.qa@example.com\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "USU-PUT-01 - Actualizar usuario completo",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/users/1",
+                "description": "Caso de Word: USU-PUT-01. Actualizar usuario completo.\nDatos de prueba: id=1; perfil con campos válidos.\nResultado/validaciones: 200 esperado; revisar campos devueltos. Código, id y campos de perfil.\nPrioridad: Alta.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Usuario actualizado mediante PUT\",\n  \"username\": \"usuario_qa_put\",\n  \"email\": \"usuario.put@example.com\",\n  \"address\": {\n    \"street\": \"Calle de prueba\",\n    \"suite\": \"Apto. 1\",\n    \"city\": \"Ciudad de prueba\",\n    \"zipcode\": \"00000-0000\",\n    \"geo\": {\n      \"lat\": \"0.0000\",\n      \"lng\": \"0.0000\"\n    }\n  },\n  \"phone\": \"555-0100\",\n  \"website\": \"ejemplo.test\",\n  \"company\": {\n    \"name\": \"Empresa de prueba\",\n    \"catchPhrase\": \"Soluciones de calidad\",\n    \"bs\": \"pruebas de software\"\n  },\n  \"id\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Código HTTP 200 - actualizar usuario\", function () {",
+                      "  pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Respuesta refleja los datos de actualización - usuario\", function () {",
+                      "  const datos = pm.response.json();",
+                      "  pm.expect(datos.id).to.eql(1);",
+                      "  pm.expect(datos.name).to.eql(\"Usuario actualizado mediante PUT\");",
+                      "  pm.expect(datos.username).to.eql(\"usuario_qa_put\");",
+                      "  pm.expect(datos.email).to.eql(\"usuario.put@example.com\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "PATCH-027 - Actualizar el nombre del usuario",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json; charset=UTF-8",
+                    "type": "text"
+                  }
+                ],
+                "url": "{{baseUrl}}/users/1",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\":\"Nombre actualizado\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "description": "Origen: matriz colaborativa, caso PATCH-027.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - actualización parcial simulada\", function () { pm.response.to.have.status(200); });",
+                      "pm.test(\"La respuesta refleja el nombre actualizado\", function () { pm.expect(pm.response.json().name).to.eql(\"Nombre actualizado\"); });"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "DELETE-023 - Eliminar un usuario existente",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/users/1"
+              },
+              "description": "Origen: matriz colaborativa, caso DELETE-023.",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 200 - eliminación simulada\", function () { pm.response.to.have.status(200); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Casos complementarios — 20 (exploratorios)",
+      "description": "Pruebas exploratorias de límites, tipos de datos y manejo de solicitudes. Documentar las respuestas observadas; no declarar defecto sin requerimiento o criterio de aceptación.",
+      "item": [
+        {
+          "name": "Publicaciones",
+          "item": [
+            {
+              "name": "GET-PST-004 - Consultar ID fuera del rango de referencia",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/posts/101",
+                "description": "ID de matriz: GET-PST-004\n\nTipo: Borde / exploratorio; prioridad: P2.\n\nQué verificar: Complementario: registrar código HTTP y cuerpo real; no imponer una expectativa de negocio sin contrato documentado."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"GET-PST-004 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "POST-003 - Crear publicación sin title (exploratorio)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/posts",
+                "description": "ID de matriz: POST-003\n\nTipo: Negativo / exploratorio; prioridad: P2.\n\nQué verificar: HTTP 201 esperado; respuesta JSON con id y los campos enviados. Confirmar la respuesta real.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"userId\":1,\"body\":\"Contenido de prueba sin título\"}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"HTTP 201 - creación de publicación sin title\", function () {",
+                      "  pm.response.to.have.status(201);",
+                      "});",
+                      "pm.test(\"La respuesta contiene id\", function () {",
+                      "  const data = pm.response.json();",
+                      "  pm.expect(data).to.have.property(\"id\");",
+                      "});",
+                      "pm.test(\"La respuesta refleja los campos enviados\", function () {",
+                      "  const data = pm.response.json();",
+                      "  pm.expect(data.userId).to.eql(1);",
+                      "  pm.expect(data.body).to.eql(\"Contenido de prueba sin título\");",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Comentarios",
+          "item": [
+            {
+              "name": "COM-GET-04 - Consultar ID fuera del rango documentado",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/comments/501",
+                "description": "ID de matriz: COM-GET-04\n\nTipo: Borde / exploratorio; prioridad: P2.\n\nQué verificar: Complementario: registrar código HTTP y cuerpo real; no imponer una expectativa de negocio sin contrato documentado.\n\nNotas de la matriz: Caso de Word: COM-GET-04. Consultar ID fuera del rango documentado.\nDatos de prueba: ID=501.\nResultado/validaciones: Registrar la respuesta real. Código y cuerpo; revisar expectativa.\nPrioridad: Media."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"COM-GET-04 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "COM-POST-02 - Explorar validaciones y límites",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/comments",
+                "description": "ID de matriz: COM-POST-02\n\nTipo: Negativo / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.\n\nNotas de la matriz: Caso de Word: COM-POST-02. Explorar validaciones y límites.\nDatos de prueba: Email omitido/nulo; postId texto; name vacío; body largo.\nResultado/validaciones: Definir expectativa antes de ejecutar. Probar una variante por vez.\nPrioridad: Media.\nNota: La solicitud inicia con email omitido. Para los demás escenarios, cambia solo el campo indicado y vuelve a ejecutar esta misma solicitud; no hace falta crear más solicitudes.\n\nSi exploras las variantes adicionales indicadas, cambia una sola condición por ejecución y registra cada resultado en el Excel; no crees solicitudes nuevas.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"postId\": 1,\n  \"name\": \"Comentario de prueba\",\n  \"body\": \"Comentario enviado desde Postman para el proyecto QA.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"COM-POST-02 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "COM-PUT-02 - Explorar límites de actualización",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/comments/1",
+                "description": "ID de matriz: COM-PUT-02\n\nTipo: Negativo / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.\n\nNotas de la matriz: Caso de Word: COM-PUT-02. Explorar límites de actualización.\nDatos de prueba: ID distinto; email ausente/nulo; tipo incorrecto; body largo.\nResultado/validaciones: Por confirmar según el contrato. Una variante por ejecución.\nPrioridad: Media.\nNota: La solicitud inicia con ID distinto al de la ruta. Para los demás escenarios, cambia solo una condición del cuerpo y vuelve a ejecutar esta misma solicitud.\n\nSi exploras las variantes adicionales indicadas, cambia una sola condición por ejecución y registra cada resultado en el Excel; no crees solicitudes nuevas.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": 2,\n  \"postId\": 1,\n  \"name\": \"Comentario actualizado mediante PUT\",\n  \"email\": \"qa.put@example.com\",\n  \"body\": \"Cuerpo actualizado para la prueba PUT.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"COM-PUT-02 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Álbumes",
+          "item": [
+            {
+              "name": "ALB-GET-04 - Consultar ID fuera del rango documentado",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/albums/101",
+                "description": "ID de matriz: ALB-GET-04\n\nTipo: Borde / exploratorio; prioridad: P2.\n\nQué verificar: Complementario: registrar código HTTP y cuerpo real; no imponer una expectativa de negocio sin contrato documentado.\n\nNotas de la matriz: Caso de Word: ALB-GET-04. Consultar ID fuera del rango documentado.\nDatos de prueba: ID=101.\nResultado/validaciones: Registrar la respuesta real. Código y cuerpo; revisar expectativa.\nPrioridad: Media."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"ALB-GET-04 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "ALB-POST-02 - Explorar validación de título y usuario",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/albums",
+                "description": "ID de matriz: ALB-POST-02\n\nTipo: Negativo / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.\n\nNotas de la matriz: Caso de Word: ALB-POST-02. Explorar validación de título y usuario.\nDatos de prueba: userId omitido/texto; title vacío/nulo/largo.\nResultado/validaciones: Definir expectativa antes de ejecutar. Probar una variante por vez.\nPrioridad: Media.\nNota: La solicitud inicia con userId omitido. Para los demás escenarios, modifica solo una variante y vuelve a ejecutar esta misma solicitud.\n\nSi exploras las variantes adicionales indicadas, cambia una sola condición por ejecución y registra cada resultado en el Excel; no crees solicitudes nuevas.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Álbum de prueba de QA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"ALB-POST-02 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "ALB-PUT-02 - Explorar límites de actualización",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/albums/1",
+                "description": "ID de matriz: ALB-PUT-02\n\nTipo: Negativo / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.\n\nNotas de la matriz: Caso de Word: ALB-PUT-02. Explorar límites de actualización.\nDatos de prueba: ID distinto; title nulo/número; userId texto.\nResultado/validaciones: Por confirmar según el contrato. Una variante por ejecución.\nPrioridad: Media.\nNota: La solicitud inicia con ID distinto al de la ruta. Prueba las demás variantes cambiando una sola condición del cuerpo.\n\nSi exploras las variantes adicionales indicadas, cambia una sola condición por ejecución y registra cada resultado en el Excel; no crees solicitudes nuevas.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": 2,\n  \"userId\": 1,\n  \"title\": \"Álbum actualizado mediante PUT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"ALB-PUT-02 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Fotos",
+          "item": [
+            {
+              "name": "FOT-GET-04 - Consultar ID fuera del rango documentado",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/photos/5001",
+                "description": "ID de matriz: FOT-GET-04\n\nTipo: Borde / exploratorio; prioridad: P2.\n\nQué verificar: Complementario: registrar código HTTP y cuerpo real; no imponer una expectativa de negocio sin contrato documentado.\n\nNotas de la matriz: Caso de Word: FOT-GET-04. Consultar ID fuera del rango documentado.\nDatos de prueba: ID=5001.\nResultado/validaciones: Registrar la respuesta real. Código y cuerpo; revisar expectativa.\nPrioridad: Media."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"FOT-GET-04 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "FOT-POST-02 - Explorar validación de campos",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/photos",
+                "description": "ID de matriz: FOT-POST-02\n\nTipo: Negativo / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.\n\nNotas de la matriz: Caso de Word: FOT-POST-02. Explorar validación de campos.\nDatos de prueba: albumId/url omitidos; URL incorrecta; title largo.\nResultado/validaciones: Definir expectativa antes de ejecutar. Probar una variante por vez.\nPrioridad: Media.\nNota: La solicitud inicia con albumId omitido. Para los demás escenarios, modifica una sola variante del cuerpo y vuelve a ejecutar.\n\nSi exploras las variantes adicionales indicadas, cambia una sola condición por ejecución y registra cada resultado en el Excel; no crees solicitudes nuevas.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Foto de prueba de QA\",\n  \"url\": \"https://example.com/foto-prueba.jpg\",\n  \"thumbnailUrl\": \"https://example.com/miniatura-prueba.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"FOT-POST-02 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "FOT-PUT-02 - Explorar límites de actualización",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/photos/1",
+                "description": "ID de matriz: FOT-PUT-02\n\nTipo: Negativo / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.\n\nNotas de la matriz: Caso de Word: FOT-PUT-02. Explorar límites de actualización.\nDatos de prueba: ID distinto; URL número/incorrecta; title nulo.\nResultado/validaciones: Por confirmar según el contrato. Una variante por ejecución.\nPrioridad: Media.\nNota: La solicitud inicia con ID distinto al de la ruta. Prueba las otras variantes por separado sobre la misma solicitud.\n\nSi exploras las variantes adicionales indicadas, cambia una sola condición por ejecución y registra cada resultado en el Excel; no crees solicitudes nuevas.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": 2,\n  \"albumId\": 1,\n  \"title\": \"Foto actualizada mediante PUT\",\n  \"url\": \"https://example.com/foto-actualizada.jpg\",\n  \"thumbnailUrl\": \"https://example.com/miniatura-actualizada.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"FOT-PUT-02 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Tareas",
+          "item": [
+            {
+              "name": "TAR-GET-04 - Consultar ID fuera del rango documentado",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/todos/201",
+                "description": "ID de matriz: TAR-GET-04\n\nTipo: Borde / exploratorio; prioridad: P2.\n\nQué verificar: Complementario: registrar código HTTP y cuerpo real; no imponer una expectativa de negocio sin contrato documentado.\n\nNotas de la matriz: Caso de Word: TAR-GET-04. Consultar ID fuera del rango documentado.\nDatos de prueba: ID=201.\nResultado/validaciones: Registrar la respuesta real. Código y cuerpo; revisar expectativa.\nPrioridad: Media."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"TAR-GET-04 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "TAR-POST-02 - Explorar tipos y campos obligatorios",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/todos",
+                "description": "ID de matriz: TAR-POST-02\n\nTipo: Negativo / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.\n\nNotas de la matriz: Caso de Word: TAR-POST-02. Explorar tipos y campos obligatorios.\nDatos de prueba: completed texto; userId omitido; title vacío/nulo/largo.\nResultado/validaciones: Definir expectativa antes de ejecutar. Probar una variante por vez.\nPrioridad: Media.\nNota: La solicitud inicia con completed como texto. Prueba userId omitido y variantes de title modificando una sola condición cada vez.\n\nSi exploras las variantes adicionales indicadas, cambia una sola condición por ejecución y registra cada resultado en el Excel; no crees solicitudes nuevas.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": 1,\n  \"title\": \"Tarea de prueba de QA\",\n  \"completed\": \"false\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"TAR-POST-02 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "TAR-PUT-02 - Explorar tipos y límites",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/todos/1",
+                "description": "ID de matriz: TAR-PUT-02\n\nTipo: Negativo / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.\n\nNotas de la matriz: Caso de Word: TAR-PUT-02. Explorar tipos y límites.\nDatos de prueba: completed tipo incorrecto; userId texto; title ausente.\nResultado/validaciones: Por confirmar según el contrato. Una variante por ejecución.\nPrioridad: Media.\nNota: La solicitud inicia con ID distinto y completed como texto. Prueba cada alternativa cambiando una condición a la vez.\n\nSi exploras las variantes adicionales indicadas, cambia una sola condición por ejecución y registra cada resultado en el Excel; no crees solicitudes nuevas.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": 1,\n  \"userId\": 1,\n  \"title\": \"Tarea actualizada mediante PUT\",\n  \"completed\": \"true\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"TAR-PUT-02 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Usuarios",
+          "item": [
+            {
+              "name": "USU-GET-04 - Consultar ID fuera del rango documentado",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/users/11",
+                "description": "ID de matriz: USU-GET-04\n\nTipo: Borde / exploratorio; prioridad: P2.\n\nQué verificar: Complementario: registrar código HTTP y cuerpo real; no imponer una expectativa de negocio sin contrato documentado.\n\nNotas de la matriz: Caso de Word: USU-GET-04. Consultar ID fuera del rango documentado.\nDatos de prueba: ID=11.\nResultado/validaciones: Registrar la respuesta real. Código y cuerpo; revisar expectativa.\nPrioridad: Media."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"USU-GET-04 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "USU-POST-02 - Explorar validaciones del perfil",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/users",
+                "description": "ID de matriz: USU-POST-02\n\nTipo: Negativo / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.\n\nNotas de la matriz: Caso de Word: USU-POST-02. Explorar validaciones del perfil.\nDatos de prueba: Email incorrecto; name vacío/nulo; address tipo incorrecto; texto largo.\nResultado/validaciones: Definir expectativa antes de ejecutar. Probar una variante por vez.\nPrioridad: Media.\nNota: La solicitud inicia con email inválido. Para los otros escenarios, modifica una sola variante del perfil y vuelve a ejecutar esta misma solicitud.\n\nSi exploras las variantes adicionales indicadas, cambia una sola condición por ejecución y registra cada resultado en el Excel; no crees solicitudes nuevas.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Usuario de prueba\",\n  \"username\": \"usuario_qa\",\n  \"email\": \"correo-sin-arroba\",\n  \"address\": {\n    \"street\": \"Calle de prueba\",\n    \"suite\": \"Apto. 1\",\n    \"city\": \"Ciudad de prueba\",\n    \"zipcode\": \"00000-0000\",\n    \"geo\": {\n      \"lat\": \"0.0000\",\n      \"lng\": \"0.0000\"\n    }\n  },\n  \"phone\": \"555-0100\",\n  \"website\": \"ejemplo.test\",\n  \"company\": {\n    \"name\": \"Empresa de prueba\",\n    \"catchPhrase\": \"Soluciones de calidad\",\n    \"bs\": \"pruebas de software\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"USU-POST-02 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "USU-PUT-02 - Explorar límites de actualización",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/users/1",
+                "description": "ID de matriz: USU-PUT-02\n\nTipo: Negativo / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.\n\nNotas de la matriz: Caso de Word: USU-PUT-02. Explorar límites de actualización.\nDatos de prueba: ID distinto; email ausente/incorrecto; address inválido.\nResultado/validaciones: Por confirmar según el contrato. Una variante por ejecución.\nPrioridad: Media.\nNota: La solicitud inicia con ID distinto al de la ruta; los demás datos son válidos. Prueba email ausente/incorrecto y address inválido cambiando una sola condición a la vez.\n\nSi exploras las variantes adicionales indicadas, cambia una sola condición por ejecución y registra cada resultado en el Excel; no crees solicitudes nuevas.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Usuario actualizado mediante PUT\",\n  \"username\": \"usuario_qa_put\",\n  \"email\": \"usuario.put@example.com\",\n  \"address\": {\n    \"street\": \"Calle de prueba\",\n    \"suite\": \"Apto. 1\",\n    \"city\": \"Ciudad de prueba\",\n    \"zipcode\": \"00000-0000\",\n    \"geo\": {\n      \"lat\": \"0.0000\",\n      \"lng\": \"0.0000\"\n    }\n  },\n  \"phone\": \"555-0100\",\n  \"website\": \"ejemplo.test\",\n  \"company\": {\n    \"name\": \"Empresa de prueba\",\n    \"catchPhrase\": \"Soluciones de calidad\",\n    \"bs\": \"pruebas de software\"\n  },\n  \"id\": 2\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"USU-PUT-02 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Transversales",
+          "item": [
+            {
+              "name": "GEN-002 - Enviar JSON malformado en POST",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/posts",
+                "description": "ID de matriz: GEN-002\n\nTipo: Transversal / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"userId\":1,\"title\":\"Prueba\",\"body\": }",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"GEN-002 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "GEN-003 - Enviar JSON malformado en PATCH",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/posts/1",
+                "description": "ID de matriz: GEN-003\n\nTipo: Transversal / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"title\": }",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"GEN-003 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "GEN-006 - Enviar POST con Content-Type text/plain",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "text/plain"
+                  }
+                ],
+                "url": "{{baseUrl}}/posts",
+                "description": "ID de matriz: GEN-006\n\nTipo: Transversal / exploratorio; prioridad: P2.\n\nQué verificar: Exploratorio: registrar el código HTTP y el cuerpo real. No asumir que la API debe rechazar el dato.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"userId\":1,\"title\":\"Content-Type exploratorio\",\"body\":\"Prueba\"}",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "console.log(\"GEN-006 - resultado exploratorio\");",
+                      "console.log(\"Código HTTP observado:\", pm.response.code);",
+                      "console.log(\"Texto de respuesta:\", pm.response.text());"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://jsonplaceholder.typicode.com",
+      "type": "string"
+    }
+  ]
+}
