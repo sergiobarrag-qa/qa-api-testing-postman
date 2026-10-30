@@ -4,7 +4,7 @@ Proyecto de práctica de QA para diseñar, ejecutar y documentar pruebas sobre l
 
 ## Equipo colaborador
 
-- **Sergio Barragán** — [sergiobarrag-qa](https://github.com/sergiobarrag-qa)
+- **Sergio Andrés Barragán Caro** — [sergiobarrag-qa](https://github.com/sergiobarrag-qa)
 - **Sergio Arturo Marín Contreras** — [sergioarturomc](https://github.com/sergioarturomc)
 
 Este trabajo se realizó en colaboración para compartir el diseño de casos, la ejecución de solicitudes en Postman, la revisión de respuestas HTTP/JSON y el registro de resultados. El perfil de Sergio Arturo: [github.com/sergioarturomc](https://github.com/sergioarturomc).
@@ -34,5 +34,5 @@ La colección Postman y la matriz de ejecución se encuentran en la carpeta `ent
 
 ## Perfiles del equipo
 
-- [Sergio Barragán — GitHub](https://github.com/sergiobarrag-qa)
+- [Sergio Andrés Barragán Caro — GitHub](https://github.com/sergiobarrag-qa)
 - [Sergio Arturo Marín Contreras — GitHub](https://github.com/sergioarturomc)
