@@ -1,67 +1,38 @@
-# Proyecto QA – Diseño de Casos de Prueba
+# Proyecto colaborativo de pruebas de API REST con Postman
 
-## Descripción del proyecto
-Este proyecto corresponde al diseño y documentación de casos de prueba manuales para validar funcionalidades clave de una aplicación web.
+Proyecto de práctica de QA para diseñar, ejecutar y documentar pruebas sobre la API pública de demostración [JSONPlaceholder](https://jsonplaceholder.typicode.com/).
 
-El objetivo principal fue identificar escenarios críticos de uso y documentar pruebas que permitieran detectar errores antes de la ejecución formal del sistema.
+## Equipo colaborador
 
-## Objetivo
-Diseñar casos de prueba estructurados para validar:
-- funcionamiento correcto del sistema
-- entradas válidas e inválidas
-- comportamiento esperado del usuario
-- mensajes de error
-- reglas de negocio
+- **Sergio Barragán** — [sergiobarrag-qa](https://github.com/sergiobarrag-qa)
+- **Sergio Arturo Marín Contreras** — [sergioarturomc](https://github.com/sergioarturomc)
 
-## Herramientas utilizadas
-- Google Sheets
-- Jira
-- Documentación QA
-- Técnicas de diseño de pruebas
+Este trabajo se realizó en colaboración para compartir el diseño de casos, la ejecución de solicitudes en Postman, la revisión de respuestas HTTP/JSON y el registro de resultados. El perfil de Sergio Arturo: [github.com/sergioarturomc](https://github.com/sergioarturomc).
 
-## Técnicas aplicadas
-Durante el proyecto se aplicaron técnicas de:
-- Partición de equivalencias
-- Análisis de valores límite
-- Escenarios positivos
-- Escenarios negativos
-- Priorización por riesgo
+## Alcance de la entrega colaborativa
 
-## Actividades realizadas
-- Análisis de requisitos funcionales
-- Identificación de escenarios críticos
-- Diseño de más de 40 casos de prueba
-- Clasificación por prioridad
-- Documentación para seguimiento del equipo
+- **46 casos principales:** pruebas funcionales sobre los recursos `posts`, `comments`, `albums`, `photos`, `todos` y `users`.
+- **20 casos complementarios:** exploraciones de límites, tipos de datos, campos omitidos y manejo de solicitudes.
+- **Total: 66 solicitudes** en la colección Postman.
 
-## Estructura de los casos de prueba
-Cada caso incluye:
-- ID del caso
-- Nombre del escenario
-- Precondiciones
-- Pasos de ejecución
-- Resultado esperado
-- Prioridad
-- Estado
+Los 46 casos principales tuvieron las aserciones automatizadas configuradas aprobadas en la ejecución documentada. Esto no significa que se haya validado un contrato funcional completo. Los 20 casos complementarios se registran como exploratorios y no se clasifican automáticamente como defectos.
 
-## Resultados obtenidos
-- Se documentaron más de 40 casos de prueba manuales
-- Se detectaron inconsistencias antes de la fase de ejecución
-- Se mejoró la cobertura funcional del sistema
-- Se fortaleció la trazabilidad de pruebas
+## Herramientas
 
-## Habilidades demostradas
-- Pensamiento analítico
-- Atención al detalle
-- Organización documental
-- Validación funcional
-- Comunicación de hallazgos
+- Postman para enviar solicitudes y automatizar comprobaciones.
+- JSONPlaceholder como API REST pública de demostración.
+- Excel para registrar casos, resultados y conclusiones.
+- GitHub para versionar y compartir el trabajo.
 
-## Archivos incluidos
-- `test-cases.xlsx`
-- `bug-report.docx`
-- `screenshots/`
+## Consideraciones y limitaciones
 
-## Autor
-**Sergio Andrés Barragán Caro**  
-QA Tester Junior
+JSONPlaceholder simula las operaciones de escritura. Las respuestas satisfactorias de POST, PUT, PATCH y DELETE no garantizan persistencia de cambios. Los comportamientos inesperados de escenarios exploratorios se documentan como observaciones hasta contrastarlos con requisitos o criterios de aceptación.
+
+## Entrega
+
+La colección Postman y la matriz de ejecución se encuentran en la carpeta `entrega-colaborativa/`.
+
+## Perfiles del equipo
+
+- [Sergio Barragán — GitHub](https://github.com/sergiobarrag-qa)
+- [Sergio Arturo Marín Contreras — GitHub](https://github.com/sergioarturomc)
